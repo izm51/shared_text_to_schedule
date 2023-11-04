@@ -1,4 +1,4 @@
-# trial_231009
+# shared_text_to_schedule_app
 
 A new Flutter project.
 

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "trial_231009" "\0"
+            VALUE "FileDescription", "shared_text_to_schedule_app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "trial_231009" "\0"
+            VALUE "InternalName", "shared_text_to_schedule_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "trial_231009.exe" "\0"
-            VALUE "ProductName", "trial_231009" "\0"
+            VALUE "OriginalFilename", "shared_text_to_schedule_app.exe" "\0"
+            VALUE "ProductName", "shared_text_to_schedule_app" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

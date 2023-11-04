@@ -1,6 +1,6 @@
 {
-    "name": "trial_231009",
-    "short_name": "trial_231009",
+    "name": "shared_text_to_schedule_app",
+    "short_name": "shared_text_to_schedule_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

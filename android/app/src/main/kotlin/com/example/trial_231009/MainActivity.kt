@@ -1,4 +1,4 @@
-package com.example.trial_231009
+package com.example.shared_text_to_schedule_app
 
 import io.flutter.embedding.android.FlutterActivity
 
