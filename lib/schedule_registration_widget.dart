@@ -32,7 +32,18 @@ class _ScheduleRegistrationWidgetState
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // TODO: loading画面を頑張る。ワンチャン広告
-            return const CircularProgressIndicator();
+            return Center(
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text("スケジュール抽出中...",
+                      style: Theme.of(context).textTheme.titleSmall),
+                ),
+                const CircularProgressIndicator(),
+              ],
+            ));
           } else if (snapshot.hasError) {
             return Text("エラー: ${snapshot.error}");
           } else {
