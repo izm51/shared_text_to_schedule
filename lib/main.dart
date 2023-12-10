@@ -65,12 +65,16 @@ class _SharedDataScreenState extends State<SharedDataScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Shared Data'),
+        title: const Text('カレンダー登録App'),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Container(
           child: _sharedText.isNotEmpty
               ? ScheduleRegistrationWidget(scheduleRawText: _sharedText)
-              : const Text('テキストを共有してください')),
+              : const Text('テキストを共有してください'),
+        ),
+      ),
     );
   }
 }

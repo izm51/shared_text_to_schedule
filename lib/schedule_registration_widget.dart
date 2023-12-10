@@ -37,27 +37,34 @@ class _ScheduleRegistrationWidgetState
             return Text("エラー: ${snapshot.error}");
           } else {
             return snapshot.hasData
-                ? Column(
-                    children: [
-                      ScheduleDetailWidget(
-                          title: snapshot.data?["title"],
-                          startDate: snapshot.data?["start_date"],
-                          startTime: snapshot.data?["start_time"],
-                          endDate: snapshot.data?["end_date"],
-                          endTime: snapshot.data?["end_time"],
-                          details: snapshot.data?["details"],
-                          location: snapshot.data?["location"]),
-                      ElevatedButton(
-                          onPressed: () {
-                            String url = generateCalendarURL(snapshot.data!);
-                            if (kDebugMode) {
-                              print(url);
-                            } else {
-                              launchUrlString(url);
-                            }
-                          },
-                          child: const Text("カレンダーに登録"))
-                    ],
+                ? Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ScheduleDetailWidget(
+                            title: snapshot.data?["title"],
+                            startDate: snapshot.data?["start_date"],
+                            startTime: snapshot.data?["start_time"],
+                            endDate: snapshot.data?["end_date"],
+                            endTime: snapshot.data?["end_time"],
+                            details: snapshot.data?["details"],
+                            location: snapshot.data?["location"]),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                String url =
+                                    generateCalendarURL(snapshot.data!);
+                                if (kDebugMode) {
+                                  print(url);
+                                } else {
+                                  launchUrlString(url);
+                                }
+                              },
+                              child: const Text("カレンダーに登録")),
+                        )
+                      ],
+                    ),
                   )
                 : Text("共有されたテキスト: ${widget.scheduleRawText}");
           }
