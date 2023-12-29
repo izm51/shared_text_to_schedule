@@ -49,6 +49,8 @@ class _SharedDataScreenState extends State<SharedDataScreen> {
   void initState() {
     super.initState();
 
+    // setState(() => _sharedText = "Place holder text");
+
     // リアルタイムで共有されたテキストを取得
     ReceiveSharingIntent.getTextStream().listen((String value) {
       setState(() {
@@ -79,10 +81,10 @@ class _SharedDataScreenState extends State<SharedDataScreen> {
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: SingleChildScrollView(
-        child: Container(
-          child: _sharedText.isNotEmpty
-              ? ScheduleRegistrationWidget(scheduleRawText: _sharedText)
-              : const Text('テキストを共有してください'),
+          child: Container(
+            child: _sharedText.isNotEmpty
+                ? ScheduleRegistrationWidget(scheduleRawText: _sharedText)
+                : const Text('テキストを共有してください'),
           ),
         ),
       ),
