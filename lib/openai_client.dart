@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_text_to_schedule_app/utils/firebase_event_logger.dart';
 
 String openApiKey = dotenv.get('OPENAI_API_KEY'); // FIXME: もっと頻度の低いとこで宣言できるかも
 const bool useMock = false;
@@ -77,6 +78,18 @@ Future<Map<String, dynamic>> sendTextToAPI(String text) async {
   var calendarParams =
       jsonDecode((jsonResponse['choices'] as List).first['message']['content'])
           as Map<String, dynamic>;
+
+  sendFirebaseLog("extracted_schedule", {
+    "gpt_response_content": {
+      "title": calendarParams["title"],
+      "startDate": calendarParams["start_date"],
+      "startTime": calendarParams["start_time"],
+      "endDate": calendarParams["end_date"],
+      "endTime": calendarParams["end_time"],
+      "details": calendarParams["details"],
+      "location": calendarParams["location"],
+    }
+  });
 
   return calendarParams;
 }
