@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "499121186469",
+    "project_id": "shared-text-to-schedule-app",
+    "storage_bucket": "shared-text-to-schedule-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499121186469:android:668fde1ba37cce254d4f4c",
+        "android_client_info": {
+          "package_name": "com.example.shared_text_to_schedule_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBF42ltxH4kjSMEO82ABXJiszQwLYtxcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
