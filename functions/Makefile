@@ -1,8 +1,12 @@
-deploy: lint firebase_deploy
+deploy: predeploy firebase_deploy
+predeploy: lint test
 
 lint:
 	npm --prefix ${RESOURCE_DIR} run lint &&\
 	npm --prefix ${RESOURCE_DIR} run build
+
+test:
+	npm --prefix ${RESOURCE_DIR} test
 
 firebase_deploy:
 	firebase deploy
