@@ -20,7 +20,7 @@ class ScheduleDetailWidget extends StatelessWidget {
   final String details;
   final String location;
 
-  static final DateFormat _formatter = DateFormat('yyyy年MM月dd日 hh時mm分');
+  static final DateFormat _formatter = DateFormat('yyyy年MM月dd日 HH時mm分');
 
   // params: dateString: YYYYMMDDhhmmss
   String _formatDateFromString(String dateString) {
