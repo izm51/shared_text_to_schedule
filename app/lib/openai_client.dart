@@ -23,7 +23,7 @@ Future<Map<String, dynamic>> sendTextToAPI(String text) async {
           {
             "role": "system",
             "content":
-                "ユーザーから与えられた文章から、日程情報を抽出してください。\n\n出力は次のようなJSON形式としてください。\n\n{\n  title: string, // 予定のタイトル\n  start_date: YYYYMMDD, // 開始日\n  start_time: hhmmss, // 開始時刻\n  end_date: YYYYMMDD, // 終了日\n  end_time: hhmmss, // 終了時刻\n  details: string, // 60文字程度で要約。URLは省略しない。改行コードは\"%0A\"を用いる。\n  location: string // 開催場所\n}\n\n注意:\n* 出力にはJSON形式以外の内容を含まないでください。\n* 主催者の名称が分かればtitleに含めてください\n* location は位置が特定しやすいようにしてください\n終了日時が不明な場合は開始から2時間後にしてください。。"
+                "ユーザーから与えられた文章から、日程情報を抽出してください。\n\n出力は次のようなJSON形式としてください。\n\n{\n  title: string, // 予定のタイトル\n  start_date: YYYYMMDD, // 開始日\n  start_time: hhmmss, // 開始時刻\n  end_date: YYYYMMDD, // 終了日\n  end_time: hhmmss, // 終了時刻\n  details: string, // 60文字程度で要約。URLは省略しない。改行コードは\"%0A\"を用いる。\n  location: string // 開催場所\n}\n\n注意:\n* 出力にはJSON形式以外の内容を含まないでください。\n* 主催者の名称が分かればtitleに含めてください\n* location は位置が特定しやすいようにしてください\n終了日時が不明な場合は開始から2時間後にしてください。"
           },
           {"role": "user", "content": text},
         ],
