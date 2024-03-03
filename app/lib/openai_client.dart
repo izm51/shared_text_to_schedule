@@ -101,7 +101,7 @@ String generateCalendarURL(Map<String, dynamic> params) {
     "trp": "false",
     "text": params["title"],
     "dates":
-        "${params['start_date']}T${params['start_time']}Z/${params['end_date']}T${params['end_time']}Z",
+        "${params['start_date']}T${params['start_time']}/${params['end_date']}T${params['end_time']}",
     "location": params["location"],
     "details": params["details"]
   };
