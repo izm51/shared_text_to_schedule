@@ -1,3 +1,4 @@
+name: app-distoribute
 on:
   push:
     # branches:
