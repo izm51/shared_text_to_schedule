@@ -2,8 +2,4 @@
   "eslint.workingDirectories": [
     "./functions/functions"
   ],
-  "eslint.format.enable": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  }
 }
