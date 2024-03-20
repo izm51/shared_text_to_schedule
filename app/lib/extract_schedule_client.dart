@@ -14,24 +14,29 @@ const mockResponse = {
 };
 
 Future<Schedule> askToAPI(String text) async {
-  Map<String, dynamic> res;
-  // TODO: 認証
+  try {
+    Map<String, dynamic> res;
 
-  if (!useMock) {
-    if (kDebugMode) {
-      FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+    if (!useMock) {
+      if (kDebugMode) {
+        print("useFunctionsEmulator");
+        FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+      }
+      final result = await FirebaseFunctions.instance
+          .httpsCallable('extractSchedule')
+          .call({"text": text});
+      res = result.data as Map<String, dynamic>;
+    } else {
+      await Future.delayed(const Duration(seconds: 1));
+      res = mockResponse;
     }
-    final result = await FirebaseFunctions.instance
-        .httpsCallable('extractSchedule')
-        .call({text: text});
-    res = result.data as Map<String, dynamic>;
-  } else {
-    await Future.delayed(const Duration(seconds: 1));
-    res = mockResponse;
-  }
 
-  return Schedule(res["title"], res["startDate"], res["startTime"],
-      res["endDate"], res["endTime"], res["details"], res["location"]);
+    return Schedule(res["title"], res["startDate"], res["startTime"],
+        res["endDate"], res["endTime"], res["details"], res["location"]);
+  } catch (e) {
+    print("askToAPI error: $e");
+    return Future.error(e);
+  }
 }
 
 // TODO: モデルとして外に出ししたい

@@ -1,6 +1,7 @@
 // FIXME: avoid print
 // ignore_for_file: avoid_print
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -23,7 +24,29 @@ Future main() async {
   );
   await FirebaseAnalytics.instance.logScreenView(screenName: 'home');
 
+  await anonymousSignIn();
+
   runApp(const MyApp());
+}
+
+Future<void> anonymousSignIn() async {
+  try {
+    if (kDebugMode) {
+      print("useAuthEmulator");
+      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+    }
+    await FirebaseAuth.instance.signInAnonymously();
+    print("Signed in with temporary account.");
+  } on FirebaseAuthException catch (e) {
+    print(e);
+    switch (e.code) {
+      case "operation-not-allowed":
+        print("Anonymous auth hasn't been enabled for this project.");
+        break;
+      default:
+        print("Unknown error.");
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -95,7 +118,7 @@ class _SharedDataScreenState extends State<SharedDataScreen> {
           ? FloatingActionButton(
               onPressed: () {
                 setState(() {
-                  _sharedText = "サンプルテキスト";
+                  _sharedText = _sharedText.isEmpty ? "サンプルテキスト" : "";
                 });
               },
               child: const Icon(Icons.bug_report),

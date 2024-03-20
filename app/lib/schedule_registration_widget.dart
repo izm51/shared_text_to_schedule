@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_text_to_schedule_app/extract_schedule_client.dart';
@@ -45,7 +46,15 @@ class _ScheduleRegistrationWidgetState
               ],
             ));
           } else if (snapshot.hasError) {
-            return Text("エラー: ${snapshot.error}");
+            // TODO: クラッシュレポート的なものを残せるようにする
+            if (snapshot.error is FirebaseException) {
+              // TODO: client側でエラーを定義し直す。直接Firebaseのエラーをハンドリングしないように。
+              if ((snapshot.error as FirebaseException).code ==
+                  "unauthenticated") {
+                return const Text("Err: 401 (予定を抽出できませんでした)");
+              }
+            }
+            return const Text("Err: 500 (予期せぬエラーが発生しました)");
           } else {
             return snapshot.hasData
                 ? Center(
