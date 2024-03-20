@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_text_to_schedule_app/openai_client.dart';
+import 'package:shared_text_to_schedule_app/extract_schedule_client.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import 'schedule_detail_widget.dart';
@@ -16,19 +16,19 @@ class ScheduleRegistrationWidget extends StatefulWidget {
 
 class _ScheduleRegistrationWidgetState
     extends State<ScheduleRegistrationWidget> {
-  Future<Map<String, dynamic>>? _gptResponseMapFuture;
+  Future<Schedule>? _scheduleFuture;
 
   @override
   void initState() {
     super.initState();
 
-    _gptResponseMapFuture = sendTextToAPI(widget.scheduleRawText);
+    _scheduleFuture = askToAPI(widget.scheduleRawText);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, dynamic>>(
-        future: _gptResponseMapFuture,
+    return FutureBuilder<Schedule>(
+        future: _scheduleFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // TODO: loading画面を頑張る。ワンチャン広告
@@ -53,19 +53,20 @@ class _ScheduleRegistrationWidgetState
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ScheduleDetailWidget(
-                            title: snapshot.data?["title"],
-                            startDate: snapshot.data?["start_date"],
-                            startTime: snapshot.data?["start_time"],
-                            endDate: snapshot.data?["end_date"],
-                            endTime: snapshot.data?["end_time"],
-                            details: snapshot.data?["details"],
-                            location: snapshot.data?["location"]),
+                          title: snapshot.data!.title,
+                          startDate: snapshot.data!.startDate,
+                          startTime: snapshot.data!.startTime,
+                          endDate: snapshot.data!.endDate,
+                          endTime: snapshot.data!.endTime,
+                          details: snapshot.data!.details,
+                          location: snapshot.data!.location,
+                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: ElevatedButton(
                               onPressed: () {
                                 String url =
-                                    generateCalendarURL(snapshot.data!);
+                                    snapshot.data!.toGoogleCalendarUrl();
                                 if (kDebugMode) {
                                   print(url);
                                 } else {

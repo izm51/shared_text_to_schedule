@@ -1,21 +1,20 @@
-import { onRequest, Request } from "firebase-functions/v2/https";
+import * as functions from "firebase-functions";
 import * as logger from "firebase-functions/logger";
 
 import { extractSchedule as extractScheduleFunc } from "./features/openai/service";
-import { Schedule } from "./features/openai/domain";
+import { CalndarSchedule } from "./features/openai/domain";
 
-export const healthCheck = onRequest((request, response) => {
-  logRequest(request);
-  response.send("I'm OK!");
-});
-
-export const extractSchedule = onRequest(async (request, response) => {
-  // TODO: 認証追加
-  logRequest(request);
-  const schedule: Schedule = await extractScheduleFunc(request.body.text);
-  response.send(schedule);
-});
-
-function logRequest(request: Request) {
-  logger.info(`Request: ${request.method} ${request.url}`);
-}
+export const healthCheck = functions.https.onCall(
+  (_, context: functions.https.CallableContext) => {
+    logger.info(`[called]: ${context?.rawRequest?.originalUrl}`);
+    return { message: "I'm OK!" };
+  }
+);
+export const extractSchedule = functions.https.onCall(
+  async (data, context: functions.https.CallableContext) => {
+    logger.info(`[called]: ${context?.rawRequest?.originalUrl}`);
+    // TODO: 認証追加
+    const schedule: CalndarSchedule = await extractScheduleFunc(data.text);
+    return schedule;
+  }
+);
