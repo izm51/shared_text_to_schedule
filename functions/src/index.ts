@@ -1,19 +1,21 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
-
-import {onRequest} from "firebase-functions/v2/https";
+import { onRequest, Request } from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+import { extractSchedule as extractScheduleFunc } from "./features/openai/service";
+import { Schedule } from "./features/openai/domain";
 
-export const helloWorld = onRequest((request, response) => {
-  logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
+export const healthCheck = onRequest((request, response) => {
+  logRequest(request);
+  response.send("I'm OK!");
 });
+
+export const extractSchedule = onRequest(async (request, response) => {
+  // TODO: 認証追加
+  logRequest(request);
+  const schedule: Schedule = await extractScheduleFunc(request.body.text);
+  response.send(schedule);
+});
+
+function logRequest(request: Request) {
+  logger.info(`Request: ${request.method} ${request.url}`);
+}
