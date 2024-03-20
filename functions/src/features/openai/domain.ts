@@ -1,13 +1,3 @@
-export interface Schedule {
-  title: string;
-  start: Date;
-  end: Date;
-  details: string;
-  location: string;
-  startString: string;
-  endString: string;
-}
-
 export class CalendarScheduleBuildError extends Error {
   static {
     this.prototype.name = "CalendarScheduleBuildError";
@@ -16,8 +6,10 @@ export class CalendarScheduleBuildError extends Error {
 
 export class CalndarSchedule {
   title: string;
-  start: Date;
-  end: Date;
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
   details: string;
   location: string;
 
@@ -77,26 +69,22 @@ export class CalndarSchedule {
     details: string;
     location: string;
   }) {
-    this.title = params.title;
-    this.start = parseDate(params.startDate, params.startTime);
-    this.end = parseDate(params.endDate, params.endTime);
-    this.details = params.details;
-    this.location = params.location;
+    const start = parseDate(params.startDate, params.startTime);
+    const end = parseDate(params.endDate, params.endTime);
 
-    if (this.start > this.end) {
+    if (start > end) {
       throw new CalendarScheduleBuildError(
-        // eslint-disable-next-line max-len
         `Invalid start and end: ${params.startDate}T${params.startTime} > ${params.endDate}T${params.endTime}`
       );
     }
-  }
 
-  get startString(): string {
-    return `${formatDate(this.start)} ${formatTime(this.start)}`;
-  }
-
-  get endString(): string {
-    return `${formatDate(this.end)} ${formatTime(this.end)}`;
+    this.title = params.title;
+    this.startDate = params.startDate;
+    this.startTime = params.startTime;
+    this.endDate = params.endDate;
+    this.endTime = params.endTime;
+    this.details = params.details;
+    this.location = params.location;
   }
 }
 
@@ -108,17 +96,4 @@ function parseDate(date: string, time: string): Date {
   const minute = parseInt(time.slice(2, 4));
   const second = parseInt(time.slice(4, 6));
   return new Date(year, monthIndex, day, hour, minute, second);
-}
-
-function formatDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = ("0" + (date.getMonth() + 1)).slice(-2);
-  const day = ("0" + date.getDate()).slice(-2);
-  return `${year}年${month}月${day}日`;
-}
-
-function formatTime(date: Date): string {
-  const hour = ("0" + date.getHours()).slice(-2);
-  const minute = ("0" + date.getMinutes()).slice(-2);
-  return `${hour}時${minute}分`;
 }

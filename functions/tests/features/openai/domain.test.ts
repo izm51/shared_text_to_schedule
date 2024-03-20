@@ -2,7 +2,6 @@ import { describe, test, expect } from "@jest/globals";
 import {
   CalendarScheduleBuildError,
   CalndarSchedule,
-  Schedule,
 } from "../../../src/features/openai/domain";
 
 describe("CalenderSchedule domain", () => {
@@ -21,12 +20,10 @@ describe("CalenderSchedule domain", () => {
       const calendarSchedule = CalndarSchedule.fromJSON(contentJson);
 
       expect(calendarSchedule.title).toBe("東京クリスマスマーケット2023");
-      expect(calendarSchedule.start).toEqual(
-        new Date("2023-11-23T16:00:00+09:00")
-      );
-      expect(calendarSchedule.end).toEqual(
-        new Date("2023-12-25T21:30:00+09:00")
-      );
+      expect(calendarSchedule.startDate).toEqual("20231123");
+      expect(calendarSchedule.startTime).toEqual("160000");
+      expect(calendarSchedule.endDate).toEqual("20231225");
+      expect(calendarSchedule.endTime).toEqual("213000");
       expect(calendarSchedule.details).toBe(
         "日本最大級のクリスマスマーケット。飲食店25店舗、雑貨30店舗が集結。音楽団の演奏などステージパフォーマンスも。"
       );
@@ -106,24 +103,6 @@ describe("CalenderSchedule domain", () => {
           "Invalid start and end: 20231225T213000 > 20231123T160000"
         )
       );
-    });
-  });
-
-  describe("インスタンスについて", () => {
-    test("日時がparseできる", () => {
-      const calendarSchedule: Schedule = new CalndarSchedule({
-        title: "東京クリスマスマーケット2023",
-        startDate: "20231123",
-        startTime: "160000",
-        endDate: "20231225",
-        endTime: "213000",
-        details:
-          "日本最大級のクリスマスマーケット。飲食店25店舗、雑貨30店舗が集結。音楽団の演奏などステージパフォーマンスも。",
-        location: "明治神宮外苑 聖徳記念絵画館前・総合球技場",
-      });
-
-      expect(calendarSchedule.startString).toBe("2023年11月23日 16時00分");
-      expect(calendarSchedule.endString).toBe("2023年12月25日 21時30分");
     });
   });
 });

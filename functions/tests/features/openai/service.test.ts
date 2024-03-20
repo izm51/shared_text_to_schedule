@@ -39,8 +39,10 @@ describe("extractSchedule", () => {
   test("Call the function main must return message", async () => {
     expect(await extractSchedule("dummy text")).toEqual({
       title: "東京クリスマスマーケット2023",
-      start: new Date("2023-11-23T16:00:00+09:00"),
-      end: new Date("2023-12-25T21:30:00+09:00"),
+      startDate: "20231123",
+      startTime: "160000",
+      endDate: "20231225",
+      endTime: "213000",
       details:
         "日本最大級のクリスマスマーケット。飲食店25店舗、雑貨30店舗が集結。音楽団の演奏などステージパフォーマンスも。",
       location: "明治神宮外苑 聖徳記念絵画館前・総合球技場",
