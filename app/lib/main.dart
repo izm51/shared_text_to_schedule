@@ -1,6 +1,7 @@
 // FIXME: avoid print
 // ignore_for_file: avoid_print
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -89,6 +90,16 @@ class _SharedDataScreenState extends State<SharedDataScreen> {
           ),
         ),
       ),
+      floatingActionButton: kDebugMode
+          ? FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  _sharedText = "サンプルテキスト";
+                });
+              },
+              child: const Icon(Icons.bug_report),
+            )
+          : null,
     );
   }
 }
