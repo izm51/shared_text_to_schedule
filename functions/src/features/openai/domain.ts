@@ -8,12 +8,65 @@ export interface Schedule {
   endString: string;
 }
 
+export class CalendarScheduleBuildError extends Error {
+  static {
+    this.prototype.name = "CalendarScheduleBuildError";
+  }
+}
+
 export class CalndarSchedule {
   title: string;
   start: Date;
   end: Date;
   details: string;
   location: string;
+
+  static fromJSON(json: string): CalndarSchedule {
+    const obj = JSON.parse(json);
+
+    const requiredKeys = [
+      "title",
+      "start_date",
+      "start_time",
+      "end_date",
+      "end_time",
+      "details",
+      "location",
+    ];
+    for (const key of requiredKeys) {
+      if (obj[key] === undefined) {
+        throw new CalendarScheduleBuildError(`JSON does not have ${key}`);
+      }
+    }
+
+    const dateKeys = ["start_date", "end_date"];
+    for (const key of dateKeys) {
+      if (obj[key].length !== 8) {
+        throw new CalendarScheduleBuildError(
+          `JSON has invalid ${key}: ${obj[key]} must be YYYYMMDD`
+        );
+      }
+    }
+
+    const timeKeys = ["start_time", "end_time"];
+    for (const key of timeKeys) {
+      if (obj[key].length !== 6) {
+        throw new CalendarScheduleBuildError(
+          `JSON has invalid ${key}: ${obj[key]} must be hhmmss`
+        );
+      }
+    }
+
+    return new CalndarSchedule({
+      title: obj.title,
+      startDate: obj.start_date,
+      startTime: obj.start_time,
+      endDate: obj.end_date,
+      endTime: obj.end_time,
+      details: obj.details,
+      location: obj.location,
+    });
+  }
 
   constructor(params: {
     title: string;
@@ -29,6 +82,13 @@ export class CalndarSchedule {
     this.end = parseDate(params.endDate, params.endTime);
     this.details = params.details;
     this.location = params.location;
+
+    if (this.start > this.end) {
+      throw new CalendarScheduleBuildError(
+        // eslint-disable-next-line max-len
+        `Invalid start and end: ${params.startDate}T${params.startTime} > ${params.endDate}T${params.endTime}`
+      );
+    }
   }
 
   get startString(): string {
