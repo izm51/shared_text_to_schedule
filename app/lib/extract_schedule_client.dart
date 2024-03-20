@@ -1,4 +1,5 @@
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/foundation.dart';
 
 const bool useMock = false;
 
@@ -17,7 +18,9 @@ Future<Schedule> askToAPI(String text) async {
   // TODO: 認証
 
   if (!useMock) {
-    FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+    if (kDebugMode) {
+      FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+    }
     final result = await FirebaseFunctions.instance
         .httpsCallable('extractSchedule')
         .call({text: text});
