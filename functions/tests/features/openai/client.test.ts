@@ -4,6 +4,7 @@ import { ChatCompletion } from "openai/resources/chat/completions";
 import { askToExtractSchedule } from "../../../src/features/openai/client";
 
 describe("askToExtractSchedule", () => {
+  // MEMO: 本当にOpenAIのAPIに問い合わせたいときは、OPENAI_USE_MOCK=falseにしてからこのテストを実行する
   test.skip("OpenAIのAPIに本当に問い合わせて、レスポンスを確認する", async () => {
     const text = `\
     ＜明治神宮外苑＞日本最大級「東京クリスマスマーケット2023」グリューワインや欧風料理、雑貨も

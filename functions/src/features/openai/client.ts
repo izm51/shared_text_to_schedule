@@ -1,6 +1,11 @@
 import OpenAI from "openai";
 import "dotenv/config";
 
+// MEMO: デフォでmockを使っている。ただし、テスト側でも関数をMockするようにする。
+// ローカルとテストで同じ設定を使うので、ローカルでモック使ってないときにテストでクレジット消費してしまう危険がある。
+// TODO: https://zenn.dev/ncdc/articles/jest-environment
+const openaiUseMock = process.env.OPENAI_USE_MOCK || true;
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -26,19 +31,55 @@ const systemMessage = `\
 * 終了日時が不明な場合は開始日時から2時間後にしてください。\
 `;
 
-export async function askToExtractSchedule(text: string)
-  : Promise<OpenAI.Chat.Completions.ChatCompletion> {
-  const chatCompletion: OpenAI.Chat.ChatCompletion =
-    await openai.chat.completions.create({
-      "model": "gpt-3.5-turbo-1106",
-      "response_format": {"type": "json_object"},
-      "messages": [
-        {role: "system", content: systemMessage},
-        {role: "user", content: text},
+const mockResponse: OpenAI.Chat.Completions.ChatCompletion = {
+  id: "chatcmpl-8dfaITYvUkRvyN3oGyyGH7UFGSrDT",
+  object: "chat.completion",
+  created: 1704465334,
+  model: "gpt-3.5-turbo-1106",
+  choices: [
+    {
+      index: 0,
+      message: {
+        role: "assistant",
+        /* eslint-disable max-len */
+        content: `\
+        {
+          "title": "東京クリスマスマーケット2023",
+          "start_date": "20231123",
+          "start_time": "160000",
+          "end_date": "20231225",
+          "end_time": "213000",
+          "details": "日本最大級のクリスマスマーケット。飲食店25店舗、雑貨30店舗が集結。音楽団の演奏などステージパフォーマンスも。",
+          "location": "明治神宮外苑 聖徳記念絵画館前・総合球技場"
+        }`,
+        /* eslint-enable max-len */
+      },
+      logprobs: null,
+      finish_reason: "stop",
+    },
+  ],
+  usage: { prompt_tokens: 688, completion_tokens: 167, total_tokens: 855 },
+  system_fingerprint: "fp_99cc374e39",
+};
+
+export async function askToExtractSchedule(
+  text: string
+): Promise<OpenAI.Chat.Completions.ChatCompletion> {
+  let chatCompletion: OpenAI.Chat.ChatCompletion;
+  if (!openaiUseMock) {
+    chatCompletion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo-1106",
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: systemMessage },
+        { role: "user", content: text },
       ],
-      "temperature": 0.2,
-      "max_tokens": 256,
+      temperature: 0.2,
+      max_tokens: 256,
     });
+  } else {
+    chatCompletion = mockResponse;
+  }
 
   return chatCompletion;
 }
