@@ -4,7 +4,7 @@ import "dotenv/config";
 // MEMO: デフォでmockを使っている。ただし、テスト側でも関数をMockするようにする。
 // ローカルとテストで同じ設定を使うので、ローカルでモック使ってないときにテストでクレジット消費してしまう危険がある。
 // TODO: https://zenn.dev/ncdc/articles/jest-environment
-const openaiUseMock = process.env.OPENAI_USE_MOCK || true;
+const openaiUseMock = (process.env.OPENAI_USE_MOCK || "true") === "true";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
