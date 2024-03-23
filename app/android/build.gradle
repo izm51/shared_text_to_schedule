@@ -19,6 +19,15 @@ allprojects {
         google()
         mavenCentral()
     }
+
+    // MEMO: -Xlint:unchecked の詳細を出すために設定した
+    // https://qiita.com/tsalva/items/60b78683a9d859f05469
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+
 }
 
 rootProject.buildDir = '../build'
