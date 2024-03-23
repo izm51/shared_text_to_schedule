@@ -1,6 +1,8 @@
 import { jest, describe, test, expect } from "@jest/globals";
-import { extractSchedule } from "../../../src/features/openai/service";
 import { ChatCompletion } from "openai/resources/chat/completions";
+
+import { ScheduleExtractService } from "../../../src/features/openai/service";
+import { OpenaiClient } from "../../../src/features/openai/client";
 
 const mockResponse: ChatCompletion = {
   id: "chatcmpl-8dfaITYvUkRvyN3oGyyGH7UFGSrDT",
@@ -14,7 +16,7 @@ const mockResponse: ChatCompletion = {
         role: "assistant",
         content: `\
         {
-          "title": "東京クリスマスマーケット2023",
+          "title": "東京クリスマスマーケット202X",
           "start_date": "20231123",
           "start_time": "160000",
           "end_date": "20231225",
@@ -31,14 +33,21 @@ const mockResponse: ChatCompletion = {
   system_fingerprint: "fp_99cc374e39",
 };
 
-jest.mock("../../../src/features/openai/client", () => ({
-  askToExtractSchedule: () => mockResponse,
-}));
-
 describe("extractSchedule", () => {
+  const openaiClientMock = new OpenaiClient({
+    openaiApiKey: "dummy",
+    useMock: true,
+  });
+
+  jest
+    .spyOn(openaiClientMock, "askToExtractSchedule")
+    .mockResolvedValue(mockResponse);
+
+  const scheduleExtractService = new ScheduleExtractService(openaiClientMock);
+
   test("Call the function main must return message", async () => {
-    expect(await extractSchedule("dummy text")).toEqual({
-      title: "東京クリスマスマーケット2023",
+    expect(await scheduleExtractService.extractSchedule("dummy text")).toEqual({
+      title: "東京クリスマスマーケット202X",
       startDate: "20231123",
       startTime: "160000",
       endDate: "20231225",

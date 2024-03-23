@@ -1,10 +1,20 @@
 import { ChatCompletion } from "openai/resources/chat/completions";
-import { askToExtractSchedule } from "./client";
+import { OpenaiClient } from "./client";
 import { CalndarSchedule } from "./domain";
 
-export async function extractSchedule(text: string): Promise<CalndarSchedule> {
-  const response: ChatCompletion = await askToExtractSchedule(text);
-  const contentJson = response.choices[0].message.content as string;
-  const schedule = CalndarSchedule.fromJSON(contentJson);
-  return schedule;
+export class ScheduleExtractService {
+  private client: OpenaiClient;
+
+  constructor(client: OpenaiClient) {
+    this.client = client;
+  }
+
+  async extractSchedule(text: string): Promise<CalndarSchedule> {
+    const response: ChatCompletion = await this.client.askToExtractSchedule(
+      text
+    );
+    const contentJson = response.choices[0].message.content as string;
+    const schedule = CalndarSchedule.fromJSON(contentJson);
+    return schedule;
+  }
 }

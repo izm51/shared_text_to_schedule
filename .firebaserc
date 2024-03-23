@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "shared-text-to-schedule-app"
-  }
+    "default": "shared-text-to-schedule-app",
+    "prod": "shared-text-to-schedule-app"
+  },
+  "targets": {},
+  "etags": {}
 }

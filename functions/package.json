@@ -8,7 +8,7 @@
     "serve:watch": "npm run build:watch | firebase emulators:start",
     "xxx_shell": "npm run build && firebase functions:shell",
     "xxx_start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "firebase use prod && firebase deploy --only functions && firebase use --clear",
     "test": "jest",
     "xxx_logs": "firebase functions:log"
   },
