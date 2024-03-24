@@ -1,8 +1,9 @@
 // FIXME: avoid print
 // ignore_for_file: avoid_print
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -14,14 +15,36 @@ import 'schedule_registration_widget.dart';
 // TODO: 画像も受け取れるように
 // TODO: 最低限、デザインも便利に
 Future main() async {
-  await dotenv.load(fileName: '.env');
+  WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseAnalytics.instance.logScreenView(screenName: 'home');
 
+  await anonymousSignIn();
+
   runApp(const MyApp());
+}
+
+Future<void> anonymousSignIn() async {
+  try {
+    if (kDebugMode) {
+      print("useAuthEmulator");
+      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+    }
+    await FirebaseAuth.instance.signInAnonymously();
+    print("Signed in with temporary account.");
+  } on FirebaseAuthException catch (e) {
+    print(e);
+    switch (e.code) {
+      case "operation-not-allowed":
+        print("Anonymous auth hasn't been enabled for this project.");
+        break;
+      default:
+        print("Unknown error.");
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -49,8 +72,6 @@ class _SharedDataScreenState extends State<SharedDataScreen> {
   @override
   void initState() {
     super.initState();
-
-    // setState(() => _sharedText = "Place holder text");
 
     // リアルタイムで共有されたテキストを取得
     ReceiveSharingIntent.getTextStream().listen((String value) {
@@ -89,6 +110,16 @@ class _SharedDataScreenState extends State<SharedDataScreen> {
           ),
         ),
       ),
+      floatingActionButton: kDebugMode
+          ? FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  _sharedText = _sharedText.isEmpty ? "サンプルテキスト" : "";
+                });
+              },
+              child: const Icon(Icons.bug_report),
+            )
+          : null,
     );
   }
 }
