@@ -52,31 +52,6 @@ class Schedule {
   Schedule(this.title, this.startDate, this.startTime, this.endDate,
       this.endTime, this.details, this.location);
 
-  // XXX: いらなかったら後で消す
-  // factory Schedule.fromJson(Map<String, dynamic> json) {
-  //   return Schedule(
-  //     json['title'] as String,
-  //     json['start_date'] as String,
-  //     json['start_time'] as String,
-  //     json['end_date'] as String,
-  //     json['end_time'] as String,
-  //     json['details'] as String,
-  //     json['location'] as String,
-  //   );
-  // }
-
-  // String _formatDateTime(DateTime dateTime) {
-  //   return DateFormat('yyyy年MM月dd日 HH時mm分ss秒').format(dateTime);
-  // }
-
-  // String get startString {
-  //   return _formatDateTime(DateTime.parse("${startDate}T$startTime"));
-  // }
-
-  // String get endString {
-  //   return _formatDateTime(DateTime.parse("${endDate}T$endTime"));
-  // }
-
   String toGoogleCalendarUrl() {
     Map<String, dynamic> urlParams = {
       "action": "TEMPLATE",

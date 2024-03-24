@@ -4,7 +4,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -17,7 +16,6 @@ import 'schedule_registration_widget.dart';
 // TODO: 最低限、デザインも便利に
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await dotenv.load(fileName: '.env');
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -74,8 +72,6 @@ class _SharedDataScreenState extends State<SharedDataScreen> {
   @override
   void initState() {
     super.initState();
-
-    // setState(() => _sharedText = "Place holder text");
 
     // リアルタイムで共有されたテキストを取得
     ReceiveSharingIntent.getTextStream().listen((String value) {
